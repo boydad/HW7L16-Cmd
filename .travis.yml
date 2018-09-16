@@ -1,0 +1,33 @@
+dist: trusty
+sudo: required
+language: cpp
+compiler: clang
+
+before_script:
+  - sudo apt-get update -qq
+  - sudo apt-get install -y -qq graphviz doxygen #libboost-test-dev
+
+script:
+  - cmake -DCMAKE_BUILD_TYPE=Release .
+  - cmake --build .
+  - cmake --build . --target package
+#  - doxygen Doxyfile 
+
+before_deploy: 
+  - 'export _PROJECT_NAME="HW7L16-Cmd"'
+  - 'export _PACKAGE_NAME="cmd"'
+  - 'export _PROJECT_VERSION=`grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+" cmake/GetGitRevisionDescription/version.cpp`'
+
+deploy:
+#  - provider: pages
+#    skip-cleanup: true
+#    github-token: $GITHUB_TOKEN
+#    keep-history: true
+#    local-dir: doc/html
+
+  - provider: script
+    skip_cleanup: true
+    script:
+    - '! curl -T ${_PACKAGE_NAME}-${_PROJECT_VERSION}-Linux.deb -uboydad:$BINTRAY_API_KEY "https://api.bintray.com/content/boydad/otus-cpp/${_PROJECT_NAME}/${_PROJECT_VERSION}/${_PROJECT_NAME}/${_PACKAGE_NAME}-${_PROJECT_VERSION}-Linux.deb;deb_distribution=trusty;deb_component=main;deb_architecture=amd64;publish=1" | grep -v success'
+    on:
+      branch: master
