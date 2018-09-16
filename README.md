@@ -1,5 +1,5 @@
 # Пакетная обработка команд
-<!--[![Build Status](https://travis-ci.org/boydad/HW7L16-Matrix.svg?branch=master)](https://travis-ci.org/boydad/HW7L16-Matrix) -->
+[![Build Status](https://travis-ci.org/boydad/HW7L16-Cmd.svg?branch=master)](https://travis-ci.org/boydad/HW7L16-Cmd)
 
 
 ## Условие задания

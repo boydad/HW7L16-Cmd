@@ -15,7 +15,7 @@ script:
 
 before_deploy: 
   - 'export _PROJECT_NAME="HW7L16-Cmd"'
-  - 'export _PACKAGE_NAME="cmd"'
+  - 'export _PACKAGE_NAME="bulk"'
   - 'export _PROJECT_VERSION=`grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+" cmake/GetGitRevisionDescription/version.cpp`'
 
 deploy:
