@@ -3,7 +3,7 @@
 PrintHandler::PrintHandler(): buffer(nullptr) {}
 
 
-void PrintHandler::set(std::queue<std::string>* buffer) {
+void PrintHandler::set(const std::shared_ptr< std::queue<std::string> >& buffer) {
   this->buffer = buffer;    
 }
 
@@ -14,13 +14,15 @@ void PrintHandler::handle(const std::chrono::system_clock::time_point& eventTime
   strftime(name, 17, "bulk%X.log", localtime(&tmp));    
   std::ofstream log(name, std::ofstream::app);
 
-  std::cout << "bulk: ";
+  std::cout << "bulk: ";  
   
+  std::string sep{""};  
   while(!buffer->empty()){
     auto& command = buffer->front();
-    std::cout << command << ' ';
-    log << command << ' ';
+    std::cout << sep << command;
+    log << sep << command;
     buffer->pop();
+    sep = ", ";
   }
   log << '\n';
   std::cout << std::endl;

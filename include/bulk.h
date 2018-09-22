@@ -19,17 +19,21 @@
 #include <vector>
 #include <queue>
 #include <string>
+#include <memory>
 
 #include "handl.h"
 
 class Bulk{
-  std::queue<std::string> buffer;
+  std::shared_ptr< std::queue<std::string> > buffer;
   size_t buffSize;
-  bool customBulk;
-  std::chrono::system_clock::time_point time;  
-  std::vector<IHandler*> handlers;
+  size_t numCustomBulk;
+  std::chrono::system_clock::time_point time;    
+  std::vector< std::shared_ptr<IHandler> > handlers;
   
   void notify();
+  void addCustomBulk();
+  void delCustomBulk();
+  void addInBulk(std::string&& command);
   
 public:
   Bulk(const int buffSize);
@@ -39,7 +43,7 @@ public:
   
   void add(std::string&& command);
   
-  void subscribe(IHandler* hand);    
+  void subscribe(const std::shared_ptr<IHandler>& hand);    
 };
 
 

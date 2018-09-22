@@ -26,12 +26,12 @@ public:
   virtual ~IHandler() = default;
   
   virtual void handle(const std::chrono::system_clock::time_point& eventTime) = 0;
-  virtual void set(std::queue<std::string>* buffer) = 0 ;
+  virtual void set(const std::shared_ptr< std::queue<std::string> >& buffer) = 0 ;
 };
 
 
 class PrintHandler: public IHandler{
-  std::queue<std::string>* buffer;
+  std::shared_ptr< std::queue<std::string> > buffer;
   
 public:
   PrintHandler();
@@ -39,7 +39,7 @@ public:
   PrintHandler(const PrintHandler& other) = delete;
   PrintHandler operator=(const PrintHandler& other) = delete;
   
-  void set(std::queue<std::string>* buffer) override;
+  void set(const std::shared_ptr< std::queue<std::string> >& buffer) override;
   
   void handle(const std::chrono::system_clock::time_point& eventTime) override;
   
