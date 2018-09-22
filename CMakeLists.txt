@@ -15,6 +15,8 @@ set_target_properties(${EXECUTE_FILE_NAME} PROPERTIES
   COMPILE_FLAGS "-Wpedantic -Wall -Wextra"
 )
 
+enable_testing()
+add_subdirectory(tests)
 
 install(TARGETS ${EXECUTE_FILE_NAME} DESTINATION bin)
 

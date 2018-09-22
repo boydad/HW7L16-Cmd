@@ -2,8 +2,10 @@
 #include <stdexcept>
 
 #include "bulk.h"
+#include "handl.h"
 
 
+#include <string>
 int main(int argc, char** argv){
 	
   if(argc != 2)
