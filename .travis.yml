@@ -5,7 +5,7 @@ compiler: clang
 
 before_script:
   - sudo apt-get update -qq
-  - sudo apt-get install -y -qq graphviz doxygen libgtest-dev
+  - sudo apt-get install -y -qq graphviz doxygen libgtest-dev cmake
   - cd /usr/src/gtest 
   - sudo cmake CMakeLists.txt
   - sudo make
