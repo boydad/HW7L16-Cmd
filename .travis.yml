@@ -5,12 +5,18 @@ compiler: clang
 
 before_script:
   - sudo apt-get update -qq
-  - sudo apt-get install -y -qq graphviz doxygen #libboost-test-dev
+  - sudo apt-get install -y -qq graphviz doxygen libgtest-dev
+  - cd /usr/src/gtest 
+  - sudo cmake CMakeLists.txt
+  - sudo make
+  - sudo cp *.a /usr/lib
 
 script:
-  - cmake -DCMAKE_BUILD_TYPE=Release .
+  - cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON .
   - cmake --build .
+  - cmake --build . --target test
   - cmake --build . --target package
+  - cmake --build 
 #  - doxygen Doxyfile 
 
 before_deploy: 
