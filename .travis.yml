@@ -1,16 +1,23 @@
 dist: trusty
-sudo: required
 language: cpp
-compiler: clang
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gcc-7
+      - g++-7
 
 before_script:
-  - sudo apt-get update -qq
-  - sudo apt-get install -y -qq graphviz libgtest-dev cmake
+  - export CC=gcc-7
+  - export CXX=g++-7
   - cd /usr/src/gtest
   - sudo cmake .
   - sudo make
   - sudo cp *.a /usr/lib
   - cd "${TRAVIS_BUILD_DIR}"
+#  - sudo apt-get update -qq
+#  - sudo apt-get install -y -qq graphviz libgtest-dev cmake
 #  - git submodule add git@github.com:google/googletest.git
 #  - sudo ./ci/travis.sh
 
