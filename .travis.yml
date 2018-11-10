@@ -9,15 +9,18 @@ addons:
       - g++-7
       - cmake
       - libgtest-dev
+    env:
+      - CXX=g++-7
+      - CC=gcc-7
 
 before_script:
-  - export CC=gcc-7
-  - export CXX=g++-7 
   - cd /usr/src/gtest
   - sudo cmake .
   - sudo make
   - sudo cp *.a /usr/lib
   - cd "${TRAVIS_BUILD_DIR}"
+#  - export CC=gcc-7
+#  - export CXX=g++-7 
 #  - sudo apt-get install -y -qq libgtest-dev cmake 
 #  - sudo apt-get update -qq
 #  - sudo apt-get install -y -qq graphviz libgtest-dev cmake
