@@ -1,7 +1,7 @@
 #include <string>
 #include <stdexcept>
 
-#include "bulk.h"
+#include "commandManager.h"
 #include "handl.h"
 
 
@@ -13,13 +13,13 @@ int main(int argc, char** argv){
   
 	
   int n = atoi(argv[1]);  	
-	Bulk handler(n);   	
+	CommandManager manager(n);   	
   
 	auto printer = std::make_shared<PrintHandler>();
-	handler.subscribe(printer);
+	manager.subscribe(printer);
   
   for(std::string command; std::getline(std::cin, command); )
-    handler.add(std::move(command));  
+    manager.add(std::move(command));  
 
 	
   return 0;

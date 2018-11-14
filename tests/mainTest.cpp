@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
  
 #include <math.h>
-#include "bulk.h"
+#include "commandManager.h"
  
  
 
@@ -9,32 +9,32 @@
 class TestBulk : public ::testing::Test
 {
 protected:
-	void SetUp(){
+	void SetUp(){		  
 		const int bulkSize = 3;
-		bulk.reset(new Bulk(bulkSize));
+		bulk.reset(new CommandManager(bulkSize));
 		printer = std::make_shared<PrintHandler>();
 		
-		bulk->subscribe(printer);
+		bulk->subscribe(printer);		
 	}
 	void TearDown(){
 		
 	}
 	
-	std::unique_ptr<Bulk> bulk;
+	std::unique_ptr<CommandManager> bulk;
 	std::shared_ptr<PrintHandler> printer;
 };
 
 
-TEST_F(TestBulk, taskCase1){
+TEST_F(TestBulk, taskCase1){	
 	testing::internal::CaptureStdout();
 	
-	bulk->add("1");
-	bulk->add("2");
-	bulk->add("3");
+	bulk->add("1");	
+	bulk->add("2");	
+	bulk->add("3");	
 	bulk->add("4");
 	bulk->add("5");
-	
-	auto tmp = bulk.release();
+		
+		auto tmp = bulk.release();
 	delete tmp;
 	
 	const std::string expected("bulk: 1, 2, 3\nbulk: 4, 5\n");

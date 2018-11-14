@@ -8,46 +8,64 @@
  * File:   bulk.h
  * Author: boyda
  *
- * Created on 17 сентября 2018 г., 8:44
+ * Created on 13 ноября 2018 г., 20:36
  */
 
-#ifndef BULK_H
-#define BULK_H
-
+#pragma once
 
 #include <chrono>
 #include <vector>
-#include <queue>
 #include <string>
-#include <memory>
 
-#include "handl.h"
 
 class Bulk{
-  std::shared_ptr< std::queue<std::string> > buffer;
-  size_t buffSize;
-  size_t numCustomBulk;
-  std::chrono::system_clock::time_point time;    
-  std::vector< std::shared_ptr<IHandler> > handlers;
-  
-  void notify();
-  void addCustomBulk();
-  void delCustomBulk();
-  void addInBulk(std::string&& command);
+  std::chrono::system_clock::time_point firstCommandTime;
+  std::vector<std::string> commands;
+  bool empty;
   
 public:
-  Bulk(const int buffSize);
-  Bulk(const Bulk& other) = delete;
-  Bulk operator=(const Bulk& other) = delete;
-  ~Bulk();
   
-  void add(std::string&& command);
+  Bulk(const int maxSize) {
+    commands.reserve(maxSize);
+    empty = true;
+  }
+  ~Bulk() = default;
+  Bulk(const Bulk&) = delete;
   
-  void subscribe(const std::shared_ptr<IHandler>& hand);    
+  Bulk(Bulk&& other): Bulk(other.commands.capacity()){    
+    std::swap(firstCommandTime, other.firstCommandTime);
+    std::swap(commands, other.commands);
+    std::swap(empty, other.empty);
+  }
+  
+  Bulk& operator=(const Bulk&) = delete;
+  Bulk& operator=(Bulk&&) = delete;
+  
+  void init(const std::chrono::system_clock::time_point& time){
+    firstCommandTime = time;
+    commands.clear();
+  }
+  
+  inline bool isEmpty(){
+    return empty;
+  }
+  
+  void add(std::string&& command){
+    commands.emplace_back(std::move(command));
+    empty = false;
+  }
+  
+  const std::chrono::system_clock::time_point& getTime(){
+    return firstCommandTime;
+  }
+  
+  std::vector<std::string>& getCommands(){
+    return commands;
+  }
+  
+  auto getSize(){
+    return commands.size();
+  }
+  
+  
 };
-
-
-#include "bulk_impl.h"
-
-#endif /* BULK_H */
-
