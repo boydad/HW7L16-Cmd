@@ -4,16 +4,12 @@
 
 
 CommandManager::CommandManager(const int bulkSize): 
-    buffer(new std::queue<std::string>()),
     maxBuffSize(bulkSize), 
     numOpenBracket(0), bulk(bulkSize), bulkBuffer(new std::queue<Bulk>()) {}
 
-
 CommandManager::~CommandManager(){
-  if(numOpenBracket == 0){
+  if(numOpenBracket == 0)
     this->saveCurrentBulk();
-    this->notify();
-  }
 }
 
 void CommandManager::add(std::string&& command) { 
@@ -22,53 +18,49 @@ void CommandManager::add(std::string&& command) {
   } else if(!command.compare("}")){
       this->delCustomBulk();      
   } else{
-      this->addInBulk(std::move(command));
-  }  
-  
-  if(this->isBulkFull() and this->isBulkFullNew()){  
-    this->saveCurrentBulk();
-    this->notify();
+      this->addInBulk(std::move(command));       
   }    
 }
 
 void CommandManager::addCustomBulk(){
-  if(numOpenBracket == 0){
+  if(numOpenBracket == 0)
     this->saveCurrentBulk();
-    this->notify();      
-  }
   ++numOpenBracket;
 }
 
 void CommandManager::delCustomBulk(){
-  if(numOpenBracket == 1){
+  if(numOpenBracket == 1)
     this->saveCurrentBulk();
-    this->notify();
-  }
   --numOpenBracket;  
 }
 
-void CommandManager::notify(){
-//  if(!buffer->empty())
-//    for(auto handler: handlers)
-//      handler->handle(time);
-  
-  for(auto handler: handlers)
-    handler->handle(time);
-}
-
 void CommandManager::addInBulk(std::string&& command){
-  auto tmp = command;
-  if(buffer->empty())
-    time = std::chrono::system_clock::now();
-  buffer->push(std::move(command));  
-  
   if(bulk.isEmpty())
     bulk.init(std::chrono::system_clock::now());
-  bulk.add(std::move(tmp));
+  
+  bulk.add(std::move(command));
+  
+  if(this->isBulkFull())
+    this->saveCurrentBulk();     
+}
+
+void CommandManager::saveCurrentBulk(){    
+  if(!bulk.isEmpty())
+    bulkBuffer->push(std::move(bulk));
+
+  this->notify();
+}
+
+void CommandManager::notify(){
+  for(auto handler: handlers)
+    handler->handle();
+}
+
+bool CommandManager::isBulkFull(){
+  return bulk.getSize() == maxBuffSize and numOpenBracket == 0;
 }
 
 void CommandManager::subscribe(const std::shared_ptr<IHandler>& handler){
-  handler->set(buffer);
   handler->set(bulkBuffer);
   handlers.emplace_back(handler);
 }

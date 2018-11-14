@@ -24,31 +24,21 @@
 #include "bulk.h"
 
 class CommandManager{
-  std::shared_ptr< std::queue<std::string> > buffer;
   size_t maxBuffSize;
   size_t numOpenBracket;
-  std::chrono::system_clock::time_point time;    
   std::vector< std::shared_ptr<IHandler> > handlers;
+  Bulk bulk;
+  std::shared_ptr<std::queue<Bulk>> bulkBuffer;
   
   void notify();
   void addCustomBulk();
   void delCustomBulk();
   void addInBulk(std::string&& command);
   
-  void saveCurrentBulk(){    
-    if(!bulk.isEmpty()){
-      bulkBuffer->push(std::move(bulk));
-    }
-  };
-  inline bool isBulkFull(){
-    return buffer->size() == maxBuffSize and numOpenBracket == 0;
-  }
-  inline bool isBulkFullNew(){
-    return bulk.getSize() == maxBuffSize and numOpenBracket == 0;
-  }
+  void saveCurrentBulk();
+  inline bool isBulkFull();
   
-  Bulk bulk;
-  std::shared_ptr<std::queue<Bulk>> bulkBuffer;
+
   
 public:
   CommandManager(const int bulkSize);
@@ -56,8 +46,7 @@ public:
   CommandManager operator=(const CommandManager& other) = delete;
   ~CommandManager();
   
-  void add(std::string&& command);
-  
+  void add(std::string&& command);  
   void subscribe(const std::shared_ptr<IHandler>& hand);    
 };
 
