@@ -13,7 +13,7 @@ if(BUILD_TESTING)
 
   target_link_libraries(myTest ${GTEST_LIBRARIES} pthread)
 
-  add_test(TestName myTest)
+  add_test(myTest myTest)
 
 
 endif()

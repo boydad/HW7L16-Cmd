@@ -14,42 +14,42 @@
 #pragma once
 
 
-#include <chrono>
 #include <vector>
+#include <memory>
 #include <queue>
 #include <string>
-#include <memory>
 
-#include "handl.h"
+#include "ihandler.h"
 #include "bulk.h"
 
 class CommandManager{
+private:
   size_t maxBuffSize;
   size_t numOpenBracket;
   std::vector< std::shared_ptr<IHandler> > handlers;
+
+  inline void notify();
+  inline void addCustomBulk();
+  inline void delCustomBulk();
+  inline void addInBulk(std::string&& command);
+  inline bool isBulkFull();  
+  
+protected:  
   Bulk bulk;
   std::shared_ptr<std::queue<Bulk>> bulkBuffer;
-  
-  void notify();
-  void addCustomBulk();
-  void delCustomBulk();
-  void addInBulk(std::string&& command);
-  
-  void saveCurrentBulk();
-  inline bool isBulkFull();
+  virtual void saveCurrentBulk();
   
 
-  
 public:
   CommandManager(const int bulkSize);
   CommandManager(const CommandManager& other) = delete;
   CommandManager operator=(const CommandManager& other) = delete;
-  ~CommandManager();
+  virtual ~CommandManager();
   
   void add(std::string&& command);  
-  void subscribe(const std::shared_ptr<IHandler>& hand);    
+  void subscribe(const std::shared_ptr<IHandler>& hand);  
+  inline void finalize();  
 };
-
 
 #include "commandManagar_impl.h"
 

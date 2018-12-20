@@ -2,6 +2,7 @@
  
 #include <math.h>
 #include "commandManager.h"
+#include "printHandler.h"
  
  
 

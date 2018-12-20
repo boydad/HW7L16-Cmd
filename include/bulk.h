@@ -55,17 +55,15 @@ public:
     empty = false;
   }
   
-  const std::chrono::system_clock::time_point& getTime(){
+  const std::chrono::system_clock::time_point& getTime() const{
     return firstCommandTime;
   }
   
-  std::vector<std::string>& getCommands(){
+  const std::vector<std::string>& getCommands() const{
     return commands;
   }
   
   auto getSize(){
     return commands.size();
   }
-  
-  
 };

@@ -12,7 +12,7 @@ add_executable(${EXECUTE_FILE_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp ${v
 set_target_properties(${EXECUTE_FILE_NAME} PROPERTIES
   CXX_STANDARD 14
   CXX_STANDARD_REQUIRED ON
-  COMPILE_FLAGS "-Wpedantic -Wall -Wextra"
+  COMPILE_OPTIONS "-Wpedantic;-Wall;-Wextra"
 )
 
 enable_testing()
